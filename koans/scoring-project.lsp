@@ -49,9 +49,28 @@
 ;
 ; Your goal is to write the score method.
 
+(defun score-one (dice)
+  (cond
+    ((eq dice 1) 100)
+    ((eq dice 5) 50)
+    (t 0)))
+
+(defun has-three (sorted-dice)
+  (and (> (length sorted-dice) 2)
+       (eq (first sorted-dice) (second sorted-dice))
+       (eq (first sorted-dice) (third sorted-dice))))
+
+; note - this can be slightly optimized by sorting once and have an inner recursive function
+; also, a non-destructive sort... 
 (defun score (dice)
-  ; You need to write this method
-)
+  (if dice
+      (let ((sorted-dice (sort dice #'<)))
+	(if (has-three sorted-dice)
+	    (if (eq (car sorted-dice) 1)
+		(+ 1000 (score (subseq sorted-dice 3)))
+		(+ (* (car sorted-dice) 100) (score (subseq sorted-dice 3))))
+	    (+ (score-one (car sorted-dice)) (score (cdr sorted-dice)))))
+      0))
 
 (define-test test-score-of-an-empty-list-is-zero
     (assert-equal 0 (score nil)))
