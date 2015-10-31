@@ -57,8 +57,7 @@
 
 (defun has-three (sorted-dice)
   (and (> (length sorted-dice) 2)
-       (eq (first sorted-dice) (second sorted-dice))
-       (eq (first sorted-dice) (third sorted-dice))))
+       (apply #'= (subseq sorted-dice 0 3))))
 
 ; note - this can be slightly optimized by sorting once and have an inner recursive function
 ; also, a non-destructive sort... 
