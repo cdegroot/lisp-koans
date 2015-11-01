@@ -135,15 +135,15 @@
 (defvar *log-with-value* nil)
 
 ;; you must write this macro
-(defmacro log-form-with-value (form)
+(defmacro log-form-with-value (&body body)
   "records the body form, and the form's return value
    to the list *log-with-value* and then evalues the body normally"
   `(let ((logform nil)
-         (retval ,form))
-     (push `(:form ,form :value ,retval) *log-with-value*)
+         (retval ,@body))
+     (setf logform ',@body)
+     (push `(:form ,logform :value ,retval)
+           *log-with-value*)
      retval))
-
-
 
 (define-test test-log-form-and-value
     "log should start out empty"
